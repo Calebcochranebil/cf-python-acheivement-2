@@ -1,1 +1,4 @@
 /Exercise 2.2/A2_Recipe_App/a2-ve-recipeapp
+/a2-ve-recipeapp
+*.bak
+*.sqlite3
