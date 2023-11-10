@@ -1,0 +1,24 @@
+Models from 2.3 Changes:
+
+recipes app:
+
+- Updated recipes\models.py and removed importing "Count" as I wasn't actually using the "Count" function and was instead using the 'count()' method of a queryset which is available without importing "Count" 
+
+- Updated import statements to import recipieingredients and ingredients models up top instead of within the 'calculate_difficulty' function to preven "lazy loading" and prevent circular imports.
+
+
+recipeingredients app:
+
+- updated to include the "related_name" attribute in the "recipe" field so we could access existing ingredients when adding recipes 
+
+
+Admins from 2.3 Changes:
+
+recipes app:
+
+- Updated to import "RecipeIngredient" and "Ingredients" as well as added Django's inline formsets to enable the selection of ingredients while adding a recipe through the admin page.
+
+
+
+
+
