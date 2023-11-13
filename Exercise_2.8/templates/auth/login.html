@@ -1,0 +1,53 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="{% static 'recipes/css/login_styles.css' %}" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="login-form">
+      <h2>Log In</h2>
+      <br />
+      <form id="loginForm" method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <!-- Add your login form fields here -->
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          required
+        /><br />
+        <br />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <br />
+        <br />
+        <br />
+        <div class="buttons-container">
+          <input type="submit" value="Log In" class="login-button" />
+          <button class="cancel-button" onclick="redirectToHomepage()">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      function redirectToHomepage() {
+        window.location.href = "/";
+      }
+    </script>
+  </body>
+</html>

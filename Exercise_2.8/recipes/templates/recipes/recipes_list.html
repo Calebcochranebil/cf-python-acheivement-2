@@ -1,0 +1,142 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recipes</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'recipes/css/recipes_styles.css' %}"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script>
+      var recipesListUrl = "{% url 'recipes:recipes_list' %}";
+    </script>
+    <script src="{% static 'recipes/js/recipes_list.js' %}"></script>
+  </head>
+  <body class="recipes-list">
+    <div class="header">
+      <div class="home-button">
+        <a href="{% url 'recipes:recipes_list' %}">Home</a>
+      </div>
+      <div class="about-button">
+        <a href="{% url 'recipes:about' %}">About</a>
+      </div>
+      <div class="add-button">
+        <a href="{% url 'recipes:add_recipe' %}">Add Recipe</a>
+      </div>
+      <div class="logout-button">
+        <a href="{% url 'logout' %}" style="color: #fff; text-decoration: none">
+          Logout
+        </a>
+      </div>
+    </div>
+    <h1>Recipes</h1>
+    <!-- Search Form -->
+    <form action="" method="GET">
+      {% csrf_token %}
+      <div class="form-item">
+        {{ form.Recipe_Name.label_tag }} {{ form.Recipe_Name }}
+      </div>
+      <div class="form-item">
+        {{ form.Ingredients.label_tag }} {{ form.Ingredients }}
+      </div>
+      <div class="form-item">
+        {{ form.chart_type.label_tag }} {{ form.chart_type }}
+      </div>
+      <button type="submit">Search</button>
+      <button type="button" id="clearButton" class="clear-button">Clear</button>
+      {% if form.data.Ingredients %}
+      <a
+        href="{% url 'recipes:export_csv' %}?Recipe_Name={{ form.data.Recipe_Name }}&Ingredients={{ form.data.Ingredients }}"
+        class="btn"
+        >Export</a
+      >
+      {% else %}
+      <a
+        href="{% url 'recipes:export_csv' %}?Recipe_Name={{ form.data.Recipe_Name }}"
+        class="btn"
+        >Export</a
+      >
+      {% endif %}
+    </form>
+    <!-- Display the charts -->
+    {% if chart_image %}
+    <div class="chart-container">
+      <img
+        src="data:image/png;base64,{{ chart_image | safe }}"
+        alt="Chart"
+        class="rounded-chart"
+      />
+    </div>
+    {% endif %}
+    <!-- Display the error message -->
+    {% if error_message %}
+    <div class="alert alert-error">{{ error_message }}</div>
+    {% endif %}
+
+    <!-- The list of recipes -->
+    <ul class="recipe-list">
+      {% for recipe in recipes %}
+      <li class="recipe-item">
+        <a href="{{ recipe.get_absolute_url }}">
+          <div class="recipe-image-container">
+            <img
+              class="recipe-image"
+              src="{{ recipe.pic.url }}"
+              alt="{{ recipe.title }}"
+            />
+            <div class="recipe-title-overlay">{{ recipe.title }}</div>
+          </div>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <div class="pagination">
+      <span class="page-links">
+        {% if page_obj.has_previous %}
+        <button type="button" onclick="location.href='?page=1'">First</button>
+        <button
+          type="button"
+          onclick="location.href='?page={{ page_obj.previous_page_number }}'"
+        >
+          Previous
+        </button>
+        {% endif %} {% if page_obj.has_next %}
+        <button
+          type="button"
+          onclick="location.href='?page={{ page_obj.next_page_number }}'"
+        >
+          Next
+        </button>
+        <button
+          type="button"
+          onclick="location.href='?page={{ page_obj.paginator.num_pages }}'"
+        >
+          Last
+        </button>
+        {% endif %}
+      </span>
+    </div>
+    <div class="pagination-info">
+      <span class="page-info">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+      </span>
+    </div>
+    {% endif %}
+  </body>
+</html>

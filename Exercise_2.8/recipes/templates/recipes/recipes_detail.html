@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'recipes/css/recipes_styles.css' %}"
+    />
+  </head>
+  <body class="recipes-detail">
+    <div class="header">
+      <div class="home-button">
+        <a href="{% url 'recipes:recipes_list' %}">Home</a>
+      </div>
+      <div class="about-button">
+        <a href="{% url 'recipes:about' %}">About</a>
+      </div>
+      <div class="logout-button">
+        <a href="{% url 'logout' %}" style="color: #fff; text-decoration: none">
+          Logout
+        </a>
+      </div>
+    </div>
+    <div class="container">
+      <img
+        src="{{ object.pic.url }}"
+        alt="{{ object.title }}"
+        class="recipe-image"
+      />
+      <h2>{{ object.title }}:</h2>
+
+      <p>{{ object.description }}</p>
+
+      <p>Ingredients:</p>
+      <ul>
+        {% for ingredient in object.ingredients.all %}
+        <li>{{ ingredient }}</li>
+        {% endfor %}
+      </ul>
+
+      <p>Cooking Time: {{ object.cooking_time }} min</p>
+
+      <p>Difficulty Level: {{ object.difficulty }}</p>
+    </div>
+  </body>
+</html>
